@@ -29,5 +29,15 @@ namespace Single_Image_Super_Resolution.GUI
 			// TODO: Add constructor code after the InitializeComponent() call.
 			//
 		}
+		
+		void Button1Click(object sender, EventArgs e)
+		{
+			
+		}
+		
+		void MainFormLoad(object sender, EventArgs e)
+		{
+			
+		}
 	}
 }

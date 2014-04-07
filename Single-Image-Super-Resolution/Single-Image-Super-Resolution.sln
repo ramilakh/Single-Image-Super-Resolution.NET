@@ -4,6 +4,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # SharpDevelop 4.4
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Single-Image-Super-Resolution.GUI", "Single-Image-Super-Resolution.GUI\Single-Image-Super-Resolution.GUI.csproj", "{7B7EECB5-1549-4604-B365-CC97BBDFC6AC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Single-Image-Super-Resolution.Kernel", "Single-Image-Super-Resolution.Kernel\Single-Image-Super-Resolution.Kernel.csproj", "{B74A96F2-4643-4624-BFF4-4D822F6B08B3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -14,5 +16,9 @@ Global
 		{7B7EECB5-1549-4604-B365-CC97BBDFC6AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7B7EECB5-1549-4604-B365-CC97BBDFC6AC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7B7EECB5-1549-4604-B365-CC97BBDFC6AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B74A96F2-4643-4624-BFF4-4D822F6B08B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B74A96F2-4643-4624-BFF4-4D822F6B08B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B74A96F2-4643-4624-BFF4-4D822F6B08B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B74A96F2-4643-4624-BFF4-4D822F6B08B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 EndGlobal
