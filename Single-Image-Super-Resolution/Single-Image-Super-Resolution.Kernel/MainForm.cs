@@ -31,6 +31,8 @@ namespace Single_Image_Super_Resolution.Kernel
 			//
 		}
 		
+		int k = 9/2;
+		
 		void Button1Click(object sender, EventArgs e)
 		{
 			Kernel();
@@ -58,12 +60,12 @@ namespace Single_Image_Super_Resolution.Kernel
 			double dist = 99999;
 			int minx, miny;			
 			
-			for(int iy = 4; iy < vInImageArray.GetUpperBound(1) - 3; iy++)
-				for(int ix = 4; ix < vInImageArray.GetUpperBound(0)-3; ix++)
+			for(int iy = k; iy < vInImageArray.GetUpperBound(1) - k+1; iy++)
+				for(int ix = k; ix < vInImageArray.GetUpperBound(0)-k+1; ix++)
 					foreach(byte[,] tt in SampledImages)
 					{					
-						for(int yy = 4; yy < tt.GetUpperBound(0) - 3; yy++)
-							for(int xx = 4; xx < tt.GetUpperBound(1) - 3; xx++)
+						for(int yy = k; yy < tt.GetUpperBound(0) - k+1; yy++)
+							for(int xx = k; xx < tt.GetUpperBound(1) - k+1; xx++)
 						{
 							double dd = Dist(iy,ix,yy,xx, vInImageArray, tt);
 							if(dd < dist)
@@ -105,8 +107,8 @@ namespace Single_Image_Super_Resolution.Kernel
 		double Dist(int Ai, int Aj, int Bi, int Bj, byte[,] A, byte[,] B)
 		{
 			int sum = 0;
-			for(int i = -4; i < 5; i++)
-				for(int j = -4; j < 5; j++)
+			for(int i = -k; i < k+1; i++)
+				for(int j = -k; j < k+1; j++)
 			{
 				int l = A[Ai+i, Aj+j] - B[Bi+i, Bj+j];
 				sum += l*l;
