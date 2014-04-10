@@ -48,7 +48,7 @@ namespace Single_Image_Super_Resolution.Kernel
 			List<byte[,]> SampledImages = new List<byte[,]>();
 			Bitmap vImageI = vImage;
 			double SampleConst = 1.2;
-			for(int i = 0; i < 3; i++)	
+			for(int i = 0; i < 1/*3*/; i++)	//!!!
 			{
 				vImageI = new Bitmap(vImageI, (int)(vImageI.Width/SampleConst), (int)(vImageI.Height/SampleConst));
 				
@@ -60,12 +60,13 @@ namespace Single_Image_Super_Resolution.Kernel
 			double dist = 99999;
 			int minx, miny;			
 			
-			for(int iy = k; iy < vInImageArray.GetUpperBound(1) - k+1; iy++)
-				for(int ix = k; ix < vInImageArray.GetUpperBound(0)-k+1; ix++)
+			int steploop = 20;
+			for(int iy = k; iy < vInImageArray.GetUpperBound(0) - k+1; iy = iy+steploop/*iy++*/)
+				for(int ix = k; ix < vInImageArray.GetUpperBound(1)-k+1; ix = ix+steploop/*ix++*/)
 					foreach(byte[,] tt in SampledImages)
 					{					
-						for(int yy = k; yy < tt.GetUpperBound(0) - k+1; yy++)
-							for(int xx = k; xx < tt.GetUpperBound(1) - k+1; xx++)
+						for(int yy = k; yy < tt.GetUpperBound(0) - k+1; yy = yy+steploop/*yy++*/)
+							for(int xx = k; xx < tt.GetUpperBound(1) - k+1; xx = xx+steploop/*xx++*/)
 						{
 							double dd = Dist(iy,ix,yy,xx, vInImageArray, tt);
 							if(dd < dist)
