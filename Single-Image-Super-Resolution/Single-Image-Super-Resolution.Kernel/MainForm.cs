@@ -32,6 +32,7 @@ namespace Single_Image_Super_Resolution.Kernel
 		}
 		
 		int k = 9/2;
+		double ScaleConst = 1.2;
 		
 		void Button1Click(object sender, EventArgs e)
 		{
@@ -56,9 +57,28 @@ namespace Single_Image_Super_Resolution.Kernel
 				CodeYIQ(vImageI, vInImageArrayI);
 				SampledImages.Add(vInImageArrayI);
 			}
-						
+			
+			//decode bmp in
+			BitmapData vbmpDataIn = vImage.LockBits(new Rectangle(0,0,vImage.Width,vImage.Height),
+                 System.Drawing.Imaging.ImageLockMode.ReadWrite, vImage.PixelFormat);
+			byte[] vImageDataIn = new byte[vbmpDataIn.Stride * vbmpDataIn.Height];
+			    System.Runtime.InteropServices.Marshal.Copy(vbmpDataIn.Scan0,vImageDataIn,0
+			                                            ,vImageDataIn.Length);
+			vImage.UnlockBits(vbmpDataIn);
+			
+			//decode bmp out
+			Bitmap vImageOut = new Bitmap(vImage, (int)(vImage.Width*ScaleConst), (int)(vImage.Height*ScaleConst));
+			
+			BitmapData vbmpDataOut = vImageOut.LockBits(new Rectangle(0,0,vImageOut.Width,vImageOut.Height),
+                 System.Drawing.Imaging.ImageLockMode.ReadWrite, vImageOut.PixelFormat);
+			byte[] vImageDataOut = new byte[vbmpDataOut.Stride * vbmpDataOut.Height];
+			    System.Runtime.InteropServices.Marshal.Copy(vbmpDataOut.Scan0,vImageDataOut,0
+			                                            ,vImageDataOut.Length);
+			vImageOut.UnlockBits(vbmpDataOut);
+
+			
 			double dist = 99999;
-			int minx, miny;			
+			int minx =0, miny=0;			
 			
 			int steploop = 20;
 			for(int iy = k; iy < vInImageArray.GetUpperBound(0) - k+1; iy = iy+steploop/*iy++*/)
@@ -74,9 +94,9 @@ namespace Single_Image_Super_Resolution.Kernel
 								dist = dd;
 								minx = xx;
 								miny = yy;
-							}
-							
+							}													
 						}
+						ChangePic(vImageDataIn, vImageDataOut, minx, miny, ix, iy, ScaleConst);
 					}
 			
 			}
@@ -105,6 +125,8 @@ namespace Single_Image_Super_Resolution.Kernel
 			
 		}
 		
+		
+		
 		double Dist(int Ai, int Aj, int Bi, int Bj, byte[,] A, byte[,] B)
 		{
 			int sum = 0;
@@ -117,7 +139,10 @@ namespace Single_Image_Super_Resolution.Kernel
 			return sum;
 		}
 		
-		
+		void ChangePic(byte[]vImageDataIn, byte[] vImageDataOut, int xx, int yy, int ix, int iy, double ScaleConst)
+		{
+			
+		}
 		
 		}
 	
