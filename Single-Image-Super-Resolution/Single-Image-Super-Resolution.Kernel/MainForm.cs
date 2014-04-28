@@ -40,6 +40,7 @@ namespace Single_Image_Super_Resolution.Kernel
 			Kernel();
 		}
 		
+		//gh
 		void Kernel()
 		{
 			Bitmap vImage = new Bitmap(@"pic.png", true);
