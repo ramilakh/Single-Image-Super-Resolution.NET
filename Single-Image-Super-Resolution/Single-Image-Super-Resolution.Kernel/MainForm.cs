@@ -31,7 +31,8 @@ namespace Single_Image_Super_Resolution.Kernel
 			//
 		}
 		
-		int k = 9/2;
+		int patchSize = 9;
+		int k = 9/2, kk = 5;
 		double ScaleConst = 1.2;
 		
 		void Button1Click(object sender, EventArgs e)
@@ -42,6 +43,7 @@ namespace Single_Image_Super_Resolution.Kernel
 		void Kernel()
 		{
 			Bitmap vImage = new Bitmap(@"pic.png", true);
+			Bitmap vImageDest = new Bitmap(vImage, (int)(vImage.Width*ScaleConst), (int)(vImage.Height*ScaleConst));
 			
 			byte[,] vInImageArray = new byte[vImage.Height,vImage.Width];
 			CodeYIQ(vImage, vInImageArray);
@@ -58,7 +60,7 @@ namespace Single_Image_Super_Resolution.Kernel
 				SampledImages.Add(vInImageArrayI);
 			}
 			
-			//decode bmp in
+			//decode to bmp in
 			BitmapData vbmpDataIn = vImage.LockBits(new Rectangle(0,0,vImage.Width,vImage.Height),
                  System.Drawing.Imaging.ImageLockMode.ReadWrite, vImage.PixelFormat);
 			byte[] vImageDataIn = new byte[vbmpDataIn.Stride * vbmpDataIn.Height];
@@ -66,7 +68,7 @@ namespace Single_Image_Super_Resolution.Kernel
 			                                            ,vImageDataIn.Length);
 			vImage.UnlockBits(vbmpDataIn);
 			
-			//decode bmp out
+			//decode to bmp out
 			Bitmap vImageOut = new Bitmap(vImage, (int)(vImage.Width*ScaleConst), (int)(vImage.Height*ScaleConst));
 			
 			BitmapData vbmpDataOut = vImageOut.LockBits(new Rectangle(0,0,vImageOut.Width,vImageOut.Height),
@@ -96,7 +98,11 @@ namespace Single_Image_Super_Resolution.Kernel
 								miny = yy;
 							}													
 						}
-						ChangePic(vImageDataIn, vImageDataOut, minx, miny, ix, iy, ScaleConst);
+						int srcX = (int)((minx - kk)*SampleConst);
+						int srcY = (int)((miny - kk)*SampleConst);
+						int destX = (int)((ix - kk)*ScaleConst);
+						int destY = (int)((iy - kk)*ScaleConst);
+						ChangePic(vImage, vImageDest, srcX, srcY, destX, destY, SampleConst, ScaleConst);
 					}
 			
 			}
@@ -139,10 +145,36 @@ namespace Single_Image_Super_Resolution.Kernel
 			return sum;
 		}
 		
-		void ChangePic(byte[]vImageDataIn, byte[] vImageDataOut, int xx, int yy, int ix, int iy, double ScaleConst)
+		void ChangePic(Bitmap srcImage, Bitmap destImage, int srcX, int srcY, int destX, int destY, double srcCoef, double destCoef)
 		{
 			
+				
+		  using (Graphics graphic = Graphics.FromImage(destImage))
+        {
+            graphic.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+            graphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+            graphic.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+            graphic.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+            graphic.Clear(SystemColors.Control); 
+            
+            
+    		// Create rectangle for dest image.
+    		int destK = (int)(patchSize*destCoef);
+    		Rectangle destRect = new Rectangle(destX, destY, destK, destK);
+
+    		// Create rectangle for source image.
+    		int srcK = (int)(patchSize*srcCoef);
+    		Rectangle srcRect = new Rectangle(srcX, srcY, srcK, srcK);
+    		GraphicsUnit units = GraphicsUnit.Pixel;
+
+    		// Draw image to screen.
+    		graphic.DrawImage(srcImage, destRect, srcRect, units);
+        }
+	
+		
 		}
+		
+
 		
 		}
 	
