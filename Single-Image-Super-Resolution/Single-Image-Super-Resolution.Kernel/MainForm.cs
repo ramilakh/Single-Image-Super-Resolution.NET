@@ -40,7 +40,6 @@ namespace Single_Image_Super_Resolution.Kernel
 			Kernel();
 		}
 		
-		//gh
 		void Kernel()
 		{
 			Bitmap vImage = new Bitmap(@"pic.png", true);
@@ -84,12 +83,12 @@ namespace Single_Image_Super_Resolution.Kernel
 			int minx =0, miny=0;			
 			
 			int steploop = 20;
-			for(int iy = k; iy < vInImageArray.GetUpperBound(0) - k+1; iy = iy+steploop/*iy++*/)
-				for(int ix = k; ix < vInImageArray.GetUpperBound(1)-k+1; ix = ix+steploop/*ix++*/)
+			for(int iy = kk; iy < vInImageArray.GetUpperBound(0) - kk+1; iy = iy+steploop/*iy++*/)
+				for(int ix = kk; ix < vInImageArray.GetUpperBound(1)-kk+1; ix = ix+steploop/*ix++*/)
 					foreach(byte[,] tt in SampledImages)
 					{					
-						for(int yy = k; yy < tt.GetUpperBound(0) - k+1; yy = yy+steploop/*yy++*/)
-							for(int xx = k; xx < tt.GetUpperBound(1) - k+1; xx = xx+steploop/*xx++*/)
+						for(int yy = kk; yy < tt.GetUpperBound(0) - kk+1; yy = yy+steploop/*yy++*/)
+							for(int xx = kk; xx < tt.GetUpperBound(1) - kk+1; xx = xx+steploop/*xx++*/)
 						{
 							double dd = Dist(iy,ix,yy,xx, vInImageArray, tt);
 							if(dd < dist)
@@ -103,9 +102,14 @@ namespace Single_Image_Super_Resolution.Kernel
 						int srcY = (int)((miny - kk)*SampleConst);
 						int destX = (int)((ix - kk)*ScaleConst);
 						int destY = (int)((iy - kk)*ScaleConst);
+					//	vImageDest.Save(@"pic1.png", System.Drawing.Imaging.ImageFormat.Png);
 						ChangePic(vImage, vImageDest, srcX, srcY, destX, destY, SampleConst, ScaleConst);
+					//	vImageDest.Save(@"pic1.png", System.Drawing.Imaging.ImageFormat.Png);
+						minx =0;
+						miny=0;
+						dist = 99999;
 					}
-			
+			vImageDest.Save(@"pic1.png", System.Drawing.Imaging.ImageFormat.Png);
 			}
 				
 		
@@ -149,14 +153,15 @@ namespace Single_Image_Super_Resolution.Kernel
 		void ChangePic(Bitmap srcImage, Bitmap destImage, int srcX, int srcY, int destX, int destY, double srcCoef, double destCoef)
 		{
 			
-				
+		
+	//	Bitmap destImage1 = destImage;			
 		  using (Graphics graphic = Graphics.FromImage(destImage))
         {
             graphic.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
             graphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
             graphic.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
             graphic.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
-            graphic.Clear(SystemColors.Control); 
+            //graphic.Clear(SystemColors.Control); 
             
             
     		// Create rectangle for dest image.
@@ -169,6 +174,7 @@ namespace Single_Image_Super_Resolution.Kernel
     		GraphicsUnit units = GraphicsUnit.Pixel;
 
     		// Draw image to screen.
+    //		graphic.DrawImage(destImage, 0.0F,0.0F);
     		graphic.DrawImage(srcImage, destRect, srcRect, units);
         }
 	
